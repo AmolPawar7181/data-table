@@ -2,7 +2,14 @@ import React from 'react';
 import CheckBox from './CheckBox';
 
 const TableBody = ({body, headers, setOptionSelected}) => {
-	if (body.length === 0) return <></>;
+	if (body.length === 0)
+		return (
+			<tbody>
+				<tr>
+					<td>No records found!</td>
+				</tr>
+			</tbody>
+		);
 
 	return (
 		<tbody>

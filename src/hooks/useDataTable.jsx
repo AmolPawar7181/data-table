@@ -1,28 +1,62 @@
 import React, {useEffect, useState} from 'react';
+import {filterData} from '../utils/helpers';
 
-const useDataTable = () => {
-	const [tableData, setTableData] = useState([]);
+const useDataTable = (data) => {
+	const [tableData, setTableData] = useState([...data]);
+	const [currentTableData, setCurrentTableData] = useState([]);
 
-	const filterData = (data, keyword) => {
-		// Convert keyword to lowercase for case-insensitive search
-		const lowerKeyword = keyword.toLowerCase();
+	const [currentPage, setCurrentPage] = useState(1);
+	const [numberOfPages, setNumberOfPages] = useState(0);
+	const [productsPerPage, setProductsPerPage] = useState(10);
 
-		// Filter the data array based on the keyword
-		return data.filter((item) => {
-			// Iterate over each key in the object
-			for (let key in item) {
-				// Check if the value of the current key contains the keyword
-				if (item[key].toLowerCase().includes(lowerKeyword)) {
-					// If keyword found in any key's value, return true to keep the item
-					return true;
-				}
-			}
-			// If keyword not found in any key's value, return false to filter out the item
-			return false;
-		});
+	useEffect(() => {
+		setSlicedData();
+	}, [tableData, currentPage]);
+
+	const setSlicedData = (data = []) => {
+		//if (data.length === 0) return setCurrentTableData([]);
+
+		let newData = data.length > 0 ? [...data] : [...tableData];
+
+		const indexOfLastData = currentPage * productsPerPage;
+		const indexOfFirstData = indexOfLastData - productsPerPage;
+		let slicedData = newData.slice(indexOfFirstData, indexOfLastData);
+		setCurrentTableData([...slicedData]);
+		setPageCount(newData.length);
+		console.log('currentPage ', currentPage, numberOfPages);
+		// setCurrentPage(1);
 	};
 
-	return {tableData, setTableData, filterData};
+	const setPageCount = (len) => {
+		let pages = Math.ceil(len / productsPerPage);
+		setNumberOfPages(pages);
+	};
+
+	const searchData = (str) => {
+		setCurrentPage(1);
+		const newData = filterData(tableData, str);
+
+		if (newData.length > 0) {
+			setSlicedData(newData);
+			//setPageCount(newData.length);
+		} else {
+			setCurrentTableData([]);
+			setPageCount(0);
+		}
+	};
+
+	return {
+		tableData,
+		currentTableData,
+		setTableData,
+		setSlicedData,
+		currentPage,
+		numberOfPages,
+		productsPerPage,
+		setCurrentPage,
+		searchData,
+		setCurrentTableData,
+	};
 };
 
 export default useDataTable;
