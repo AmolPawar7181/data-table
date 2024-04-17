@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CheckBox from './CheckBox';
 
 const TableBody = ({
@@ -36,12 +36,13 @@ const TableBody = ({
 						/>
 					</td>
 					{headers.map((header) => {
-						if (row[header]) {
+						if (header !== 'actions') {
 							return (
 								<td key={header} className='px-6 py-4'>
 									{row.isEditing ? (
 										<input
 											value={row[header]}
+											placeholder={header}
 											name={header}
 											onChange={(e) => handleRowEdit(row.id, e.target)}
 										/>
@@ -71,7 +72,9 @@ const TableBody = ({
 												: 'hidden'
 										}`}
 										key={action.action}
-										onClick={() => action.event(row.id)}
+										onClick={() => {
+											action.event(row.id);
+										}}
 									>
 										<action.icon />
 									</span>

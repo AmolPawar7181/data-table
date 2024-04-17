@@ -29,7 +29,7 @@ const DataTable = ({headers, body}) => {
 
 	const [filteredData, setFilteredData] = useState([]);
 	const [isAllSelected, setIsAllSelected] = useState(false);
-
+	const [editedData, setEditedData] = useState(null);
 	// console.log(
 	// 	'tableData ',
 	// 	tableData,
@@ -101,16 +101,14 @@ const DataTable = ({headers, body}) => {
 	};
 
 	const handleRowEdit = (id, target) => {
-		if (target.value.length > 0) {
-			const newData = [...currentTableData];
-			newData.map((row) => {
-				if (row.id == id) {
-					row[target.name] = target.value;
-				}
-			});
+		const newData = [...currentTableData];
+		newData.map((row) => {
+			if (row.id == id) {
+				row[target.name] = target.value;
+			}
+		});
 
-			setCurrentTableData([...newData]);
-		}
+		setCurrentTableData([...newData]);
 	};
 
 	const actions = [
