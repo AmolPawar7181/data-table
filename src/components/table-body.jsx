@@ -1,7 +1,13 @@
 import React from 'react';
 import CheckBox from './CheckBox';
 
-const TableBody = ({body, headers, setOptionSelected}) => {
+const TableBody = ({
+	body,
+	headers,
+	setOptionSelected,
+	rowActions,
+	handleRowEdit,
+}) => {
 	if (body.length === 0)
 		return (
 			<tbody>
@@ -16,7 +22,11 @@ const TableBody = ({body, headers, setOptionSelected}) => {
 			{body.map((row) => (
 				<tr
 					key={row.id}
-					className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+					className={` border-b  dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 ${
+						row.isChecked
+							? 'bg-gray-100 dark:bg-gray-600 dark:text-gray-100'
+							: 'bg-white dark:bg-gray-800'
+					}`}
 				>
 					<td className='w-4 p-4'>
 						<CheckBox
@@ -29,18 +39,51 @@ const TableBody = ({body, headers, setOptionSelected}) => {
 						if (row[header]) {
 							return (
 								<td key={header} className='px-6 py-4'>
-									{row[header]}
+									{row.isEditing ? (
+										<input
+											value={row[header]}
+											name={header}
+											onChange={(e) => handleRowEdit(row.id, e.target)}
+										/>
+									) : (
+										<span>{row[header]}</span>
+									)}
 								</td>
 							);
 						}
 					})}
 					<td className='px-6 py-4'>
-						<a
+						<div className='flex'>
+							{rowActions.map((action) => {
+								return (
+									<span
+										className={`m-1 visible cursor-pointer ${
+											row.isEditing
+												? action.action === 'save'
+													? 'visible'
+													: action.action === 'delete'
+													? 'visible'
+													: 'hidden'
+												: action.action === 'edit'
+												? 'visible'
+												: action.action === 'delete'
+												? 'visible'
+												: 'hidden'
+										}`}
+										key={action.action}
+										onClick={() => action.event(row.id)}
+									>
+										<action.icon />
+									</span>
+								);
+							})}
+						</div>
+						{/* <a
 							href='#'
 							className='font-medium text-blue-600 dark:text-blue-500 hover:underline'
 						>
 							Edit
-						</a>
+						</a> */}
 					</td>
 					{/* <th
 						scope='row'

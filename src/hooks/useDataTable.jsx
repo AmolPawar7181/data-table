@@ -21,10 +21,11 @@ const useDataTable = (data) => {
 		const indexOfLastData = currentPage * productsPerPage;
 		const indexOfFirstData = indexOfLastData - productsPerPage;
 		let slicedData = newData.slice(indexOfFirstData, indexOfLastData);
+		console.log(indexOfFirstData, indexOfLastData);
 		setCurrentTableData([...slicedData]);
 		setPageCount(newData.length);
-		console.log('currentPage ', currentPage, numberOfPages);
-		// setCurrentPage(1);
+		console.log('currentPage ', currentPage, numberOfPages, newData.length);
+		//	setCurrentPage(1);
 	};
 
 	const setPageCount = (len) => {

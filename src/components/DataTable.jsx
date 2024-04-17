@@ -5,6 +5,7 @@ import TableFooter from './table-footer';
 import TableSearch from './table-search';
 import {filterData} from '../utils/helpers';
 import useDataTable from '../hooks/useDataTable';
+import {DeleteIcon, EditIcon, SaveIcon} from './Icons';
 
 const DataTable = ({headers, body}) => {
 	const {
@@ -18,6 +19,7 @@ const DataTable = ({headers, body}) => {
 		searchData,
 		setCurrentTableData,
 	} = useDataTable(body);
+
 	const [search, setSearch] = useState('');
 	//const [tableData, setTableData] = useState([...body]);
 
@@ -53,7 +55,6 @@ const DataTable = ({headers, body}) => {
 	// };
 
 	const setOptionSelected = (checked, option) => {
-		console.log('setOptionSelected ', checked, option);
 		const newData = [...currentTableData];
 		if (option === -1) setIsAllSelected(checked);
 
@@ -61,7 +62,6 @@ const DataTable = ({headers, body}) => {
 			if (row.id === option) row.isChecked = checked;
 			else if (option === -1) row.isChecked = checked;
 		});
-		console.log('newData ', newData);
 		setCurrentTableData([...newData]);
 	};
 
@@ -76,6 +76,60 @@ const DataTable = ({headers, body}) => {
 		}
 		//console.log('newData ', newData);
 	};
+
+	const deleteRow = (index) => {
+		setOptionSelected(true, index);
+		deleteSelectedOptions();
+	};
+
+	const setIsEditRow = (index) => {
+		const newData = [...currentTableData];
+
+		newData.map((row) => {
+			if (row.id === index) row.isEditing = true;
+		});
+
+		setCurrentTableData([...newData]);
+	};
+
+	const saveRow = (index) => {
+		const newData = [...currentTableData];
+		newData.map((row) => {
+			if (row.id === index) row.isEditing = false;
+		});
+		setCurrentTableData([...newData]);
+	};
+
+	const handleRowEdit = (id, target) => {
+		if (target.value.length > 0) {
+			const newData = [...currentTableData];
+			newData.map((row) => {
+				if (row.id == id) {
+					row[target.name] = target.value;
+				}
+			});
+
+			setCurrentTableData([...newData]);
+		}
+	};
+
+	const actions = [
+		{
+			action: 'edit',
+			event: setIsEditRow,
+			icon: EditIcon,
+		},
+		{
+			action: 'save',
+			event: saveRow,
+			icon: SaveIcon,
+		},
+		{
+			action: 'delete',
+			event: deleteRow,
+			icon: DeleteIcon,
+		},
+	];
 
 	useEffect(() => {
 		setSlicedData();
@@ -99,7 +153,7 @@ const DataTable = ({headers, body}) => {
 
 	return (
 		<div className='max-w-[1280px] m-auto overflow-x-auto '>
-			<div className='relative overflow-x-auto shadow-md sm:rounded-lg m-3 px-1 py-3'>
+			<div className='relative overflow-x-auto shadow-md sm:rounded-lg m-3 px-1 py-3 dark:text-gray-400 dark:bg-gray-900'>
 				{currentTableData && (
 					<>
 						<TableSearch search={search} setSearch={setSearch} />
@@ -113,6 +167,8 @@ const DataTable = ({headers, body}) => {
 								body={currentTableData}
 								headers={headers}
 								setOptionSelected={setOptionSelected}
+								rowActions={actions}
+								handleRowEdit={handleRowEdit}
 							/>
 						</table>
 						{numberOfPages > 0 && (
