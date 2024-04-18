@@ -58,8 +58,8 @@ const TableBody = ({
 						<div className='flex'>
 							{rowActions.map((action) => {
 								return (
-									<span
-										className={`m-1 visible cursor-pointer ${
+									<button
+										className={`${action.action} m-1 visible cursor-pointer ${
 											row.isEditing
 												? action.action === 'save'
 													? 'visible'
@@ -78,7 +78,7 @@ const TableBody = ({
 										}}
 									>
 										<action.icon />
-									</span>
+									</button>
 								);
 							})}
 						</div>

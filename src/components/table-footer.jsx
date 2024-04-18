@@ -11,7 +11,7 @@ const TableFooter = ({
 			<div className='w-full sm:w-[30%] flex items-center'>
 				<button
 					type='button'
-					className='text-white bg-red-500 font-semibold rounded-full py-1 px-4'
+					className='delete-selected text-white bg-red-500 font-semibold rounded-full py-1 px-4'
 					onClick={() => deleteSelectedOptions()}
 				>
 					Delete Selected

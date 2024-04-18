@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import './App.css';
 import DataTable from './components/DataTable';
 import {membersURL, headers} from './utils/constants';
+import ErrorBoundry from './components/ErrorBoundry';
 
 function App() {
 	const [members, setMembers] = useState([]);
@@ -23,14 +24,14 @@ function App() {
 	}, []);
 
 	return (
-		<>
+		<ErrorBoundry fallback='Something went wrong!'>
 			<div className='text-3xl font-bold underline'>Data table</div>
 			{members && members.length > 0 ? (
 				<DataTable headers={headers} body={members} />
 			) : (
-				<></>
+				<div>Loading...</div>
 			)}
-		</>
+		</ErrorBoundry>
 	);
 }
 

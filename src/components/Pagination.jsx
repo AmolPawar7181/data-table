@@ -14,12 +14,14 @@ const Pagination = ({numberOfPages, setCurrentPage, currentPage}) => {
 						isActive={false}
 						isDisabled={currentPage === firstPage}
 						onClick={() => setCurrentPage(firstPage)}
+						className='first-page'
 					/>
 					<PaginationBtn
 						txt={'<'}
 						isActive={false}
 						isDisabled={currentPage === firstPage}
 						onClick={() => setCurrentPage(currentPage - 1)}
+						className='previous-page'
 					/>
 					{pageCount.map((item, index) => {
 						return (
@@ -28,6 +30,7 @@ const Pagination = ({numberOfPages, setCurrentPage, currentPage}) => {
 								txt={index + 1}
 								isActive={currentPage === index + 1}
 								onClick={() => setCurrentPage(item)}
+								className={'page-' + item}
 							/>
 						);
 					})}
@@ -36,11 +39,13 @@ const Pagination = ({numberOfPages, setCurrentPage, currentPage}) => {
 						txt={'>'}
 						isDisabled={currentPage === lastPage}
 						onClick={() => setCurrentPage(currentPage + 1)}
+						className='next-page'
 					/>
 					<PaginationBtn
 						txt={'>>'}
 						isDisabled={currentPage === lastPage}
 						onClick={() => setCurrentPage(lastPage)}
+						className='last-page'
 					/>
 				</div>
 			)}

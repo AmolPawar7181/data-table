@@ -20,7 +20,6 @@ const DataTable = ({headers, body}) => {
 	} = useDataTable(body);
 
 	const [search, setSearch] = useState('');
-
 	const [isAllSelected, setIsAllSelected] = useState(false);
 
 	const setOptionSelected = (checked, option) => {
@@ -49,7 +48,6 @@ const DataTable = ({headers, body}) => {
 
 	const setIsEditRow = (index) => {
 		const newData = [...currentTableData];
-
 		newData.map((row) => {
 			if (row.id === index) row.isEditing = true;
 		});
