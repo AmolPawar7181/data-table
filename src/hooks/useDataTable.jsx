@@ -14,18 +14,13 @@ const useDataTable = (data) => {
 	}, [tableData, currentPage]);
 
 	const setSlicedData = (data = []) => {
-		//if (data.length === 0) return setCurrentTableData([]);
-
 		let newData = data.length > 0 ? [...data] : [...tableData];
 
 		const indexOfLastData = currentPage * productsPerPage;
 		const indexOfFirstData = indexOfLastData - productsPerPage;
 		let slicedData = newData.slice(indexOfFirstData, indexOfLastData);
-		console.log(indexOfFirstData, indexOfLastData);
 		setCurrentTableData([...slicedData]);
 		setPageCount(newData.length);
-		console.log('currentPage ', currentPage, numberOfPages, newData.length);
-		//	setCurrentPage(1);
 	};
 
 	const setPageCount = (len) => {
@@ -39,7 +34,6 @@ const useDataTable = (data) => {
 
 		if (newData.length > 0) {
 			setSlicedData(newData);
-			//setPageCount(newData.length);
 		} else {
 			setCurrentTableData([]);
 			setPageCount(0);

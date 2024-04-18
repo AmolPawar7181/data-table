@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import CheckBox from './CheckBox';
 
 const TableBody = ({
@@ -41,6 +41,7 @@ const TableBody = ({
 								<td key={header} className='px-6 py-4'>
 									{row.isEditing ? (
 										<input
+											className='border border-gray-500 px-1 text-gray-500'
 											value={row[header]}
 											placeholder={header}
 											name={header}
@@ -81,22 +82,7 @@ const TableBody = ({
 								);
 							})}
 						</div>
-						{/* <a
-							href='#'
-							className='font-medium text-blue-600 dark:text-blue-500 hover:underline'
-						>
-							Edit
-						</a> */}
 					</td>
-					{/* <th
-						scope='row'
-						className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
-					>
-						{row.name}
-					</th>
-					<td className='px-6 py-4'>{row.email}</td>
-					<td className='px-6 py-4'>{row.role}</td>
-					 */}
 				</tr>
 			))}
 		</tbody>

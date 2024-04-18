@@ -3,7 +3,6 @@ import TableHeader from './table-header';
 import TableBody from './table-body';
 import TableFooter from './table-footer';
 import TableSearch from './table-search';
-import {filterData} from '../utils/helpers';
 import useDataTable from '../hooks/useDataTable';
 import {DeleteIcon, EditIcon, SaveIcon} from './Icons';
 
@@ -21,38 +20,8 @@ const DataTable = ({headers, body}) => {
 	} = useDataTable(body);
 
 	const [search, setSearch] = useState('');
-	//const [tableData, setTableData] = useState([...body]);
 
-	// const [currentPage, setCurrentPage] = useState(1);
-	// const [numberOfPages, setNumberOfPages] = useState(0);
-	// const [productsPerPage, setProductsPerPage] = useState(10);
-
-	const [filteredData, setFilteredData] = useState([]);
 	const [isAllSelected, setIsAllSelected] = useState(false);
-	const [editedData, setEditedData] = useState(null);
-	// console.log(
-	// 	'tableData ',
-	// 	tableData,
-	// 	currentTableData,
-	// 	currentPage,
-	// 	numberOfPages
-	// );
-
-	const setSlicedData1 = (fromData) => {
-		let newData = [...fromData];
-
-		const indexOfLastData = currentPage * productsPerPage;
-		const indexOfFirstData = indexOfLastData - productsPerPage;
-		let slicedData = newData.slice(indexOfFirstData, indexOfLastData);
-		setTableData([...slicedData]);
-		setPageCount(fromData.length);
-		//console.log('tableData ', tableData);
-	};
-
-	// const setPageCount = (len) => {
-	// 	let pages = Math.ceil(len / productsPerPage);
-	// 	setNumberOfPages(pages);
-	// };
 
 	const setOptionSelected = (checked, option) => {
 		const newData = [...currentTableData];
@@ -67,14 +36,10 @@ const DataTable = ({headers, body}) => {
 
 	const deleteSelectedOptions = () => {
 		const newData = tableData.filter((row) => !row.isChecked);
-		//console.log('isAllSelected ', isAllSelected, newData, tableData);
 		setTableData([...newData]);
-		//setSlicedData([...newData]);
 		if (isAllSelected) {
-			//setCurrentPage(currentPage + 1);
 			setIsAllSelected(false);
 		}
-		//console.log('newData ', newData);
 	};
 
 	const deleteRow = (index) => {
@@ -95,9 +60,28 @@ const DataTable = ({headers, body}) => {
 	const saveRow = (index) => {
 		const newData = [...currentTableData];
 		newData.map((row) => {
-			if (row.id === index) row.isEditing = false;
+			if (row.id === index) {
+				const rowResult = doesObjHasEmptyValues(row);
+				if (!rowResult.isInValid) {
+					row.isEditing = false;
+				} else {
+					alert('Please enter value in ' + rowResult.rowName);
+				}
+			}
 		});
 		setCurrentTableData([...newData]);
+	};
+
+	const doesObjHasEmptyValues = (obj) => {
+		let output = {isInValid: false, rowName: ''};
+		for (let prop in obj) {
+			if (obj[prop].length === 0) {
+				output.isInValid = true;
+				output.rowName = prop;
+				break;
+			}
+		}
+		return output;
 	};
 
 	const handleRowEdit = (id, target) => {
@@ -133,20 +117,8 @@ const DataTable = ({headers, body}) => {
 		setSlicedData();
 	}, []);
 
-	// useEffect(() => {
-	// 	setSlicedData(search.length > 0 ? filteredData : body);
-	// 	setIsAllSelected(false);
-	// }, [currentPage]);
-
 	useEffect(() => {
-		//setCurrentPage(1);
-		//if (search.length > 0) {
 		searchData(search);
-		//}
-		// else {
-		// 	setSlicedData(body);
-		// 	setFilteredData([]);
-		// }
 	}, [search]);
 
 	return (
