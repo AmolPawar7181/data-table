@@ -7,6 +7,7 @@ import useDataTable from '../hooks/useDataTable';
 import {DeleteIcon, EditIcon, SaveIcon} from './Icons';
 
 const DataTable = ({headers, body}) => {
+	// this hook manages the data
 	const {
 		tableData,
 		currentTableData,
@@ -19,20 +20,24 @@ const DataTable = ({headers, body}) => {
 		setCurrentTableData,
 	} = useDataTable(body);
 
-	const [search, setSearch] = useState('');
+	const [searchValue, setSearchValue] = useState('');
 	const [isAllSelected, setIsAllSelected] = useState(false);
 
+	// set option selected
 	const setOptionSelected = (checked, option) => {
 		const newData = [...currentTableData];
+		// selects all the options
 		if (option === -1) setIsAllSelected(checked);
-
+		// adds isChecked property to the object
+		// so we can use it later in the JSX
 		newData.map((row) => {
 			if (row.id === option) row.isChecked = checked;
 			else if (option === -1) row.isChecked = checked;
 		});
+		// sets new data for the table
 		setCurrentTableData([...newData]);
 	};
-
+	// delete selected options
 	const deleteSelectedOptions = () => {
 		const newData = tableData.filter((row) => !row.isChecked);
 		setTableData([...newData]);
@@ -40,12 +45,12 @@ const DataTable = ({headers, body}) => {
 			setIsAllSelected(false);
 		}
 	};
-
+	// delete single row
 	const deleteRow = (index) => {
 		setOptionSelected(true, index);
 		deleteSelectedOptions();
 	};
-
+	// set row on edit mode
 	const setIsEditRow = (index) => {
 		const newData = [...currentTableData];
 		newData.map((row) => {
@@ -54,11 +59,12 @@ const DataTable = ({headers, body}) => {
 
 		setCurrentTableData([...newData]);
 	};
-
+	// save the data in the row
 	const saveRow = (index) => {
 		const newData = [...currentTableData];
 		newData.map((row) => {
 			if (row.id === index) {
+				// checks if there are any empty inputs in a row
 				const rowResult = doesObjHasEmptyValues(row);
 				if (!rowResult.isInValid) {
 					row.isEditing = false;
@@ -69,7 +75,7 @@ const DataTable = ({headers, body}) => {
 		});
 		setCurrentTableData([...newData]);
 	};
-
+	// checks of obj has any empty values
 	const doesObjHasEmptyValues = (obj) => {
 		let output = {isInValid: false, rowName: ''};
 		for (let prop in obj) {
@@ -81,7 +87,7 @@ const DataTable = ({headers, body}) => {
 		}
 		return output;
 	};
-
+	// edit row
 	const handleRowEdit = (id, target) => {
 		const newData = [...currentTableData];
 		newData.map((row) => {
@@ -92,7 +98,8 @@ const DataTable = ({headers, body}) => {
 
 		setCurrentTableData([...newData]);
 	};
-
+	// actions will be used to assign the
+	// event to the buttons
 	const actions = [
 		{
 			action: 'edit',
@@ -110,27 +117,29 @@ const DataTable = ({headers, body}) => {
 			icon: DeleteIcon,
 		},
 	];
-
+	// search data
 	useEffect(() => {
-		setSlicedData();
-	}, []);
-
-	useEffect(() => {
-		searchData(search);
-	}, [search]);
+		searchData(searchValue);
+	}, [searchValue]);
 
 	return (
 		<div className='max-w-[1280px] m-auto overflow-x-auto '>
 			<div className='relative overflow-x-auto shadow-md sm:rounded-lg m-3 px-1 py-3 dark:text-gray-400 dark:bg-gray-900'>
 				{currentTableData && (
 					<>
-						<TableSearch search={search} setSearch={setSearch} />
+						{/* Search Component */}
+						<TableSearch
+							searchValue={searchValue}
+							setSearchValue={setSearchValue}
+						/>
 						<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+							{/* Table Header with select all button */}
 							<TableHeader
 								headers={headers}
 								setOptionSelected={setOptionSelected}
 								isChecked={isAllSelected}
 							/>
+							{/* list of all users */}
 							<TableBody
 								body={currentTableData}
 								headers={headers}
@@ -140,6 +149,8 @@ const DataTable = ({headers, body}) => {
 							/>
 						</table>
 						{numberOfPages > 0 && (
+							// footer contains button to delete all selected rows
+							// and a Pagination
 							<TableFooter
 								numberOfPages={numberOfPages}
 								setCurrentPage={setCurrentPage}

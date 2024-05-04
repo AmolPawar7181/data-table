@@ -1,8 +1,17 @@
-# React + Vite
+# React Data Table
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React Data Table component gives you all the functionalities needed for a Data table, it has Pagination, search etc.
 
-Currently, two official plugins are available:
+## Deployment
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Download the project and run
+
+```bash
+  npm run install
+```
+
+Run the project
+
+```bash
+  npm run dev
+```

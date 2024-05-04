@@ -24,5 +24,5 @@ const TableHeader = ({headers, setOptionSelected, isChecked}) => {
 		</thead>
 	);
 };
-
+// memoised component
 export default memo(TableHeader);

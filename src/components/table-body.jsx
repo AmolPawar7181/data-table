@@ -8,6 +8,7 @@ const TableBody = ({
 	rowActions,
 	handleRowEdit,
 }) => {
+	// if no users found
 	if (body.length === 0)
 		return (
 			<tbody>
@@ -35,10 +36,15 @@ const TableBody = ({
 							setOptionSelected={setOptionSelected}
 						/>
 					</td>
+					{/* Headers with respective actions */}
 					{headers.map((header) => {
+						// to avoid extra empty column
 						if (header !== 'actions') {
 							return (
 								<td key={header} className='px-6 py-4'>
+									{/* showing input inline if isEditing
+										else normal text
+									*/}
 									{row.isEditing ? (
 										<input
 											className='border border-gray-500 px-1 text-gray-500'
@@ -56,6 +62,7 @@ const TableBody = ({
 					})}
 					<td className='px-6 py-4'>
 						<div className='flex'>
+							{/* action buttons like edit, save, delete */}
 							{rowActions.map((action) => {
 								return (
 									<button

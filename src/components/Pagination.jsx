@@ -1,6 +1,7 @@
 import PaginationBtn from './PaginationBtn';
 
 const Pagination = ({numberOfPages, setCurrentPage, currentPage}) => {
+	// creates array from number of pages
 	const pageCount = Array.from(Array(numberOfPages + 1).keys()).slice(1);
 	const lastPage = pageCount[pageCount.length - 1];
 	const firstPage = pageCount[0];
